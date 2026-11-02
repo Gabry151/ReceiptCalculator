@@ -11,6 +11,7 @@ class UserList
             return false;
         }
 
+        //se il nome è nella lista proibita, ritorna false
         if (name == Vocabulary.ALL)
         {
             return false;
@@ -18,6 +19,18 @@ class UserList
         
         userList.Add(new User(name));
         return true;
+    }
+
+    public static bool[] Add(string[] names)
+    {
+        bool[] results = new bool[names.Length];
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            results[i] = Add(names[i]);
+        }
+
+        return results;
     }
 
     public static bool Remove(string name)
@@ -28,6 +41,19 @@ class UserList
         userList.Remove(user);
         return true;
     }
+
+    public static bool[] Remove(string[] names)
+    {
+        bool[] results = new bool[names.Length];
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            results[i] = Remove(names[i]);
+        }
+
+        return results;
+    }
+
 
     public static User GetUserByName(string name)
     {

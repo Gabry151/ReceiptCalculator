@@ -12,3 +12,4 @@ C:\Users\Gabriele\Documents\Personal\Progetti\ReceiptCalculator v2\obj\Debug\net
 C:\Users\Gabriele\Documents\Personal\Progetti\ReceiptCalculator v2\obj\Debug\net10.0\ReceiptCalculator v2.pdb
 C:\Users\Gabriele\Documents\Personal\Progetti\ReceiptCalculator v2\obj\Debug\net10.0\ReceiptCalculator v2.genruntimeconfig.cache
 C:\Users\Gabriele\Documents\Personal\Progetti\ReceiptCalculator v2\obj\Debug\net10.0\ref\ReceiptCalculator v2.dll
+C:\Users\Gabriele\Documents\Personal\Progetti\ReceiptCalculator v2\obj\Debug\net10.0\ReceiptCalculator v2.sourcelink.json

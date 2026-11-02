@@ -1,6 +1,7 @@
 ﻿class Program
 {
-    const string Receipt = "RCP";
+    public static Menu OpenedMenu;
+    public static Receipt OpenedReceipt;
 
     static void Main(string[] args)
     {
@@ -9,12 +10,28 @@
 
     static void WaitForInput()
     {
+        Console.WriteLine("-----");
         Console.Write("> ");
         string input = Console.ReadLine();
 
         string command = Command.GetCommand(input);
         string[] prms = Command.GetParams(input);
 
+        switch (OpenedMenu)
+        {
+            case Menu.Home:
+                HomeMenuCommands(command, prms);
+                break;
+            case Menu.Edit:
+                EditMenuCommands(command, prms, OpenedReceipt);
+                break;
+        }
+
+        WaitForInput();
+    }
+
+    static void HomeMenuCommands(string command, string[] prms)
+    {
         switch (command)
         {
             case Vocabulary.CLOSE:
@@ -39,18 +56,10 @@
                 NewLine("ERROR: no command.");
                 break;
         }
-
-        WaitForInput();
     }
 
-    static void ReceiptEdit(Receipt1 receipt)
+    static void EditMenuCommands(string command, string[] prms, Receipt receipt)
     {
-        Console.Write("> ");
-        string input = Console.ReadLine();
-
-        string command = Command.GetCommand(input);
-        string[] prms = Command.GetParams(input);
-
         switch (command)
         {
             case Vocabulary.CLOSE:
@@ -82,21 +91,39 @@
         EditMenu(receipt);
     }
 
+    //---------------MENUS--------------
+
     static void HomeMenu()
     {
-        NewLine("Waiting for instructions...", true);
+        OpenedMenu = Menu.Home;
+
+        NewLine("COMMANDS:", true);
+        NewLine("|" + Vocabulary.NEW + " [type] [name] - Create a new obj of type");
+        NewLine("|" + Vocabulary.OPEN + " [name] - Open a receipt");
+        NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
+
+        Console.WriteLine();
+
+        NewLine("TYPES:");
+        NewLine("|" + Vocabulary.USER + " - User");
+        NewLine("|" + Vocabulary.RECEIPT + " - Receipt");
 
         WaitForInput();
     }
 
-    static void EditMenu(Receipt1 receipt)
+    static void EditMenu(Receipt receipt)
     {
+        OpenedMenu = Menu.Edit;
+        OpenedReceipt = receipt;
+
         NewLine("EDIT RECEIPT - " + receipt.GetName() + ":", true);
 
         NewLine(receipt.Show());
         
-        ReceiptEdit(receipt);
+        WaitForInput();
     }
+
+    //--------------------------
 
     static void NewLine(string line)
     {
@@ -138,38 +165,55 @@
 
     static void New(string[] prms)
     {
-        if (CheckParamErrors(prms, 2, 2)) return;
+        if (CheckParamErrors(prms, 2)) return;
 
-        string name = prms[1];
+        string[] names = prms.Skip(1).ToArray();
+        bool[] temp;
 
         switch (prms[0])
         {
             case Vocabulary.USER:
-                if (UserList.Add(name))
+
+                temp = UserList.Add(names);
+
+                for (int i = 0; i < temp.Length; i++)
                 {
-                    NewLine("User " + name + " successfully added.");
+                    if (temp[i])
+                    {
+                        NewLine("User " + names[i] + " successfully created.");
+                    }
+                    else
+                    {
+                        NewLine("User " + names[i] + " can't be created.");
+                    }
                 }
-                else
-                {
-                    NewLine("User " + name + " can't be added.");
-                }
+
                 break;
 
             case Vocabulary.RECEIPT:
-                if (ReceiptList.Add(name))
+
+                temp = ReceiptList.Add(names);
+
+                for (int i = 0; i < temp.Length; i++)
                 {
-                    NewLine("Receipt " + name + " successfully added.");
+                    if (temp[i])
+                    {
+                        NewLine("Receipt " + names[i] + " successfully created.");
+                    }
+                    else
+                    {
+                        NewLine("Receipt " + names[i] + " can't be created.");
+                    }
                 }
-                else
-                {
-                    NewLine("Receipt " + name + " can't be added.");
-                }
+
                 break;
 
             default:
                 NewLine("ERROR: unexisting parameters.");
                 break;
         }
+
+
     }
 
     static void Del(string[] prms)
@@ -234,7 +278,7 @@
 
         string name = prms[0];
 
-        Receipt1 receipt = ReceiptList.GetReceiptByName(name);
+        Receipt receipt = ReceiptList.GetReceiptByName(name);
 
         if (receipt == null)
         {
@@ -246,26 +290,33 @@
     }
 
 
-    static void Add(Receipt1 receipt, string[] prms)
+    static void Add(Receipt receipt, string[] prms)
     {
         if (CheckParamErrors(prms, 2)) return;
 
         prms[0] = prms[0].Replace('.', ',');
-        float amount = float.Parse(prms[0]);
+        float amount;
+        float.TryParse(prms[0], out amount);
+        if (amount == 0) return;
 
         List<string> users = new();
 
+        //se il secondo parametro è "ALL"
         if (prms[1] == Vocabulary.ALL)
         {
             users = UserList.GetAllNames();
         }
+
+        //se il secondo parametro non è "ALL"
         else
         {
-            string[] userNames = prms.Skip(1).ToArray();
+            //salta il primo parametro che è il prezzo
+            string[] nameParams = prms.Skip(1).ToArray();
 
-            foreach (string userName in userNames)
+            //per ogni parametro user
+            foreach (string userName in nameParams)
             {
-                User user = UserList.GetUserByName(userName);
+                //se esiste aggiungilo
                 if (!UserList.Contain(userName)) continue;
                 users.Add(userName);
             }
@@ -278,7 +329,7 @@
         receipt.Add(entry);
     }
 
-    static void Rmv(Receipt1 receipt, string[] prms)
+    static void Rmv(Receipt receipt, string[] prms)
     {
         if (CheckParamErrors(prms, 1, 1)) return;
 
@@ -289,30 +340,44 @@
         receipt.Remove(receipt.GetEntries()[i]);
     }
 
-    static void Dsc(Receipt1 receipt, string[] prms)
+    static void Dsc(Receipt receipt, string[] prms)
     {
-        if (CheckParamErrors(prms, 2, 2)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
 
+        //se non ci sono righe, ritorna
+        if (receipt.GetEntries().Count <= 0) return;
+
+        //registra il valore
+        prms[0] = prms[0].Replace('.', ',');
+        float amount;
+        float.TryParse(prms[0], out amount);
+
+        //registra a chi si riferisce, se non c'è parametro consideralo all'ultimo
         int i;
 
-        if (prms[0] == Vocabulary.ALL)
+        if (prms.Length == 1)
         {
-            i = -1;
-        }
-        else if (prms[0] == "NDS")
-        {
-            i = -2;
+            i = receipt.GetEntries().Count -1;
         }
         else
         {
-            i = int.Parse(prms[0]);
+            if (prms[1] == Vocabulary.ALL)
+            {
+                i = -1;
+            }
+            else if (prms[1] == "NDS")
+            {
+                i = -2;
+            }
+            else
+            {
+                int.TryParse(prms[1], out i);
 
-            if (i >= receipt.GetEntries().Count) return;
+                if (i >= receipt.GetEntries().Count) return;
+            }
         }
 
-        prms[1] = prms[1].Replace('.', ',');
-        float amount = float.Parse(prms[1]);
-
+        //applica lo sconto
         if (i < 0)
         {
             if (i == -1)
@@ -329,4 +394,10 @@
             receipt.GetEntries()[i].SetDiscount(Math.Abs(amount));
         }
     }
+}
+
+public enum Menu
+{
+    Home,
+    Edit,
 }
