@@ -4,15 +4,17 @@ class UserList
 
 
     public static List<User> Get() { return userList; }
+
     public static bool Add(string name)
     {
+        //se il nome già esiste annulla
         if (GetUserByName(name) != null)
         {
             return false;
         }
 
-        //se il nome è nella lista proibita, ritorna false
-        if (name == Vocabulary.ALL)
+        //se il nome è nella blacklist annulla
+        if (!Vocabulary.IsGood(name))
         {
             return false;
         }
@@ -100,5 +102,10 @@ class UserList
         }
 
         return temp;
+    }
+
+    public static void ClearList()
+    {
+        userList.Clear();
     }
 }

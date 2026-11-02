@@ -2,18 +2,30 @@
 {
     public static Menu OpenedMenu;
     public static Receipt OpenedReceipt;
+    public static bool blockInput;
 
     static void Main(string[] args)
     {
         HomeMenu();
     }
 
-    static void WaitForInput()
+    //--------------------------COMMANDS
+
+    public static void Wait4Input()
     {
+        if (blockInput) return;
+
         Console.WriteLine("-----");
-        Console.Write("> ");
+        Console.Write(">");
         string input = Console.ReadLine();
 
+        PerformInput(input);
+
+        Wait4Input();
+    }
+
+    public static void PerformInput(string input)
+    {
         string command = Command.GetCommand(input);
         string[] prms = Command.GetParams(input);
 
@@ -26,8 +38,6 @@
                 EditMenuCommands(command, prms, OpenedReceipt);
                 break;
         }
-
-        WaitForInput();
     }
 
     static void HomeMenuCommands(string command, string[] prms)
@@ -52,6 +62,12 @@
             case Vocabulary.OPEN:
                 Opn(prms);
                 break;
+            case Vocabulary.SAVE:
+                Sav(prms);
+                break;
+            case Vocabulary.LOAD:
+                Lod(prms);
+                break;
             default:
                 NewLine("ERROR: no command.");
                 break;
@@ -68,21 +84,24 @@
 
             case Vocabulary.CLEAR:
                 EditMenu(receipt);
-                break;
+                return;
 
             case Vocabulary.EXIT:
                 HomeMenu();
-                break;
+                return;
 
             case Vocabulary.ADD:
                 Add(receipt, prms);
                 break;
+
             case Vocabulary.REMOVE:
                 Rmv(receipt, prms);
                 break;
+
             case Vocabulary.DISCOUNT:
                 Dsc(receipt, prms);
                 break;
+
             default:
                 NewLine("ERROR: no command.");
                 break;
@@ -91,7 +110,7 @@
         EditMenu(receipt);
     }
 
-    //---------------MENUS--------------
+    //--------------------------MENUS
 
     static void HomeMenu()
     {
@@ -108,7 +127,7 @@
         NewLine("|" + Vocabulary.USER + " - User");
         NewLine("|" + Vocabulary.RECEIPT + " - Receipt");
 
-        WaitForInput();
+        Wait4Input();
     }
 
     static void EditMenu(Receipt receipt)
@@ -119,20 +138,20 @@
         NewLine("EDIT RECEIPT - " + receipt.GetName() + ":", true);
 
         NewLine(receipt.Show());
-        
-        WaitForInput();
+
+        Wait4Input();
     }
 
-    //--------------------------
+    //--------------------------CONSOLE COMMANDS
 
-    static void NewLine(string line)
+    public static void NewLine(string line)
     {
         Console.WriteLine("-" + line);
     }
     static void NewLine(string line, bool clear)
     {
         Console.Clear();
-        Console.WriteLine("Welcome to ReceiptCalculator v2.0!");
+        Console.WriteLine("Welcome to ReceiptCalculator v2.0 by Gabry151!");
         Console.WriteLine("-----");
         NewLine(line);
     }
@@ -287,6 +306,39 @@
         }
 
         EditMenu(receipt);
+    }
+
+    static void Sav(string[] prms)
+    {
+        if (CheckParamErrors(prms, 1, 1)) return;
+
+        string name = prms[0];
+
+        if (Save.DoSave(name))
+        {
+            NewLine("Saved successfully in <<" + name + ".txt>>!");
+        }
+        else
+        {
+            NewLine("Save error!");
+        }
+    }
+
+    static void Lod(string[] prms)
+    {
+        if (CheckParamErrors(prms, 1, 1)) return;
+
+        string name = prms[0];
+
+        if (Save.DoLoad(name))
+        {
+            Console.WriteLine("-----");
+            NewLine("<<" + name + ".txt>> loaded successfully!");
+        }
+        else
+        {
+            NewLine("Load error!");
+        }
     }
 
 

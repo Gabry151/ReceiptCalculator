@@ -7,7 +7,14 @@ class ReceiptList : IAddable
 
     public static bool Add(string name)
     {
+        //se già esiste annulla
         if (GetReceiptByName(name) != null)
+        {
+            return false;
+        }
+
+        //se è nella blacklist annulla
+        if (!Vocabulary.IsGood(name))
         {
             return false;
         }
@@ -62,6 +69,18 @@ class ReceiptList : IAddable
         return null;
     }
 
+    public static List<string> GetAllNames()
+    {
+        List<string> temp = new();
+
+        foreach (Receipt rct in receiptList)
+        {
+            temp.Add(rct.GetName());
+        }
+
+        return temp;
+    }
+
     public static string Show()
     {
         string temp = "List of all receipts:";
@@ -73,5 +92,10 @@ class ReceiptList : IAddable
         }
 
         return temp;
+    }
+
+    public static void ClearList()
+    {
+        receiptList.Clear();
     }
 }

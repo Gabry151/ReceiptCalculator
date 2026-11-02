@@ -70,7 +70,7 @@ class Receipt
 
     public string Show()
     {
-        string result = "List:";
+        string result = "";
 
         if (entries.Count <= 0) { return result + "\nEmpty!"; }
 
@@ -100,13 +100,11 @@ class Receipt
 
         // scrivi il totale
         result += "\nTOT: ";
-        if (GetTotalFromEntries() == GetTotalFromUsers())
+        result += GetTotalFromUsers().ToString("C");
+
+        if (GetTotalFromEntries().ToString("C") != GetTotalFromUsers().ToString("C"))
         {
-            result += GetTotalFromEntries().ToString("C");
-        }
-        else
-        {
-            result += "ERROR";
+            result += " | " + GetTotalFromEntries().ToString("C");
         }
 
         return result;
