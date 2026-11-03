@@ -142,6 +142,17 @@
         Wait4Input();
     }
 
+    // static void UserMenu(string user)
+    // {
+    //     //OpenedMenu = Menu.User;
+
+    //     NewLine("USER - " + user + ":", true);
+
+    //     NewLine(UserList.GetUserByName(user).Show());
+
+    //     Wait4Input();
+    // }
+
     //--------------------------CONSOLE COMMANDS
 
     public static void NewLine(string line)
@@ -293,19 +304,37 @@
 
     static void Opn(string[] prms)
     {
-        if (CheckParamErrors(prms, 1, 1)) return;
+        if (CheckParamErrors(prms, 2, 2)) return;
 
-        string name = prms[0];
+        string name = prms[1];
 
-        Receipt receipt = ReceiptList.GetReceiptByName(name);
-
-        if (receipt == null)
+        switch (prms[0])
         {
-            NewLine("Receipt " + name + " doesn't exist.");
-            return;
-        }
+            case Vocabulary.USER:
 
-        EditMenu(receipt);
+                NewLine(UserList.GetUserByName(name).Show());
+
+                break;
+
+            case Vocabulary.RECEIPT:
+
+                Receipt receipt = ReceiptList.GetReceiptByName(name);
+
+                //check if receipt exist
+                if (receipt == null)
+                {
+                    NewLine("Receipt " + name + " doesn't exist.");
+                    return;
+                }
+
+                EditMenu(receipt);
+
+                break;
+
+            default:
+                NewLine("ERROR: unexisting parameters.");
+                break;
+        }
     }
 
     static void Sav(string[] prms)
@@ -452,4 +481,5 @@ public enum Menu
 {
     Home,
     Edit,
+    User,
 }

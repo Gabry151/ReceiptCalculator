@@ -104,7 +104,7 @@ class Receipt
 
         if (GetTotalFromEntries().ToString("C") != GetTotalFromUsers().ToString("C"))
         {
-            result += " | " + GetTotalFromEntries().ToString("C");
+            result += " / " + GetTotalFromEntries().ToString("C");
         }
 
         return result;

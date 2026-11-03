@@ -79,7 +79,7 @@ class Save
             result += $"\n{Vocabulary.NEW} {Vocabulary.RECEIPT} {receipt}";
 
             //apri il receipt
-            result += $"\n{Vocabulary.OPEN} {receipt}";
+            result += $"\n{Vocabulary.OPEN} {Vocabulary.RECEIPT} {receipt}";
 
             //aggiungi il contenuto
             result += GetReceiptSave(ReceiptList.GetReceiptByName(receipt));
