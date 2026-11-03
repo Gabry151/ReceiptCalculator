@@ -3,6 +3,7 @@ class Receipt
     private string name;
     private List<Entry> entries = new();
     private float totalDiscount = 0f;
+    private string payer;
 
 
     public Receipt(string name)
@@ -18,6 +19,9 @@ class Receipt
 
     public List<Entry> GetEntries() { return entries; }
     public Entry GetEntry(int index) { return entries[index]; }
+
+    public string GetPayer() { return payer; }
+    public void SetPayer(string name) { payer = name; }
 
     public void Add(Entry entry)
     {
@@ -105,6 +109,13 @@ class Receipt
         if (GetTotalFromEntries().ToString("C") != GetTotalFromUsers().ToString("C"))
         {
             result += " / " + GetTotalFromEntries().ToString("C");
+        }
+
+        //scrivi chi ha pagato
+        if (GetPayer() != null)
+        {
+            result += " | PAYER: ";
+            result += GetPayer();
         }
 
         return result;

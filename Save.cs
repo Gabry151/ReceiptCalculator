@@ -31,11 +31,16 @@ class Save
             if (Path.GetInvalidPathChars().Contains(c)) return false;
         }
 
+        string filePath = Path.Combine(docPath, fileName + ".txt");
+
+        //return false se il file non esiste
+        if (!Path.Exists(filePath)) return false;
+
         ClearAllData();
 
         Program.blockInput = true;
 
-        using (StreamReader sr = new StreamReader(Path.Combine(docPath, fileName + ".txt")))
+        using (StreamReader sr = new StreamReader(filePath))
         {
             string line;
             while((line = sr.ReadLine()) != null)
@@ -115,7 +120,27 @@ class Save
             result += $"\n{Vocabulary.DISCOUNT} {receipt.GetTotalDiscount()} {Vocabulary.ALL}";
         }
 
+        //aggiungi il payer
+        if (!string.IsNullOrEmpty(receipt.GetPayer()))
+        {
+            result += $"\n{Vocabulary.PAYER} {receipt.GetPayer()}";
+        }
+
         result += "\n## END_RECEIPT: <<" + receipt.GetName() + ">>.";
+
+        return result;
+    }
+
+    public static string GetSaveList()
+    {
+        string result = "SAVE LIST:";
+
+        string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "save"), "*.txt");
+
+        foreach (string file in files)
+        {
+            result += "\n" + Path.GetFileNameWithoutExtension(file);
+        }
 
         return result;
     }

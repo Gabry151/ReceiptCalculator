@@ -19,6 +19,8 @@ public static class Vocabulary
     public const string ADD = "ADD";
     public const string REMOVE = "RMV";
     public const string DISCOUNT = "DSC";
+    public const string PAYER = "PYR";
+    public const string SETTLED = "STL";
 
     //KEYWORDS
     public const string ALL = "ALL";

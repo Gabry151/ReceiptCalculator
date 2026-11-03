@@ -102,6 +102,10 @@
                 Dsc(receipt, prms);
                 break;
 
+            case Vocabulary.PAYER:
+                Pyr(receipt, prms);
+                break;
+
             default:
                 NewLine("ERROR: no command.");
                 break;
@@ -141,17 +145,6 @@
 
         Wait4Input();
     }
-
-    // static void UserMenu(string user)
-    // {
-    //     //OpenedMenu = Menu.User;
-
-    //     NewLine("USER - " + user + ":", true);
-
-    //     NewLine(UserList.GetUserByName(user).Show());
-
-    //     Wait4Input();
-    // }
 
     //--------------------------CONSOLE COMMANDS
 
@@ -294,6 +287,14 @@
 
             case Vocabulary.RECEIPT:
                 NewLine(ReceiptList.Show());
+                break;
+            
+            case Vocabulary.SAVE:
+                NewLine(Save.GetSaveList());
+                break;
+
+            case Vocabulary.LOAD:
+                NewLine(Save.GetSaveList());
                 break;
 
             default:
@@ -474,6 +475,17 @@
         {
             receipt.GetEntries()[i].SetDiscount(Math.Abs(amount));
         }
+    }
+
+    static void Pyr(Receipt receipt, string[] prms)
+    {
+        if (CheckParamErrors(prms, 1, 1)) return;
+        
+        string name = prms[0];
+
+        if (!UserList.Contain(name)) return;
+
+        receipt.SetPayer(name);
     }
 }
 

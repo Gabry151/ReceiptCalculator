@@ -1,7 +1,6 @@
 class User
 {
     private string name;
-    private float amount;
 
 
     public User(string name)
@@ -12,17 +11,14 @@ class User
     public string GetName() { return name; }
     public void SetName(string name) { this.name = name; }
 
-    public float GetAmount() { return amount; }
-    public void SetAmount(float amount) { this.amount = amount; }
-    public void AddAmount(float amount) { SetAmount(this.amount + amount); }
-
-    public float GetTotal()
+    public float GetTotalOwnTo(string name)
     {
         float result = 0f;
 
         foreach (Receipt receipt in ReceiptList.Get())
         {
-            result += receipt.GetTotalOf(name);
+            if (receipt.GetPayer() != name) continue;
+            result += receipt.GetTotalOf(GetName());
         }
 
         return result;
@@ -30,8 +26,18 @@ class User
 
     public string Show()
     {
-        string result = name +" TO GAB: ";
-        result += GetTotal().ToString("C");
+
+        string result = GetName() + ":";
+
+        foreach (string user in UserList.GetAllNames())
+        {
+            float temp = GetTotalOwnTo(user);
+            if (temp <= 0f) continue;
+            if (GetName() == user) continue;    //skippa se è la stessa persona a cui dare soldi
+
+            result += "\n" + GetName() + " -> " + user +": ";
+            result += temp.ToString("C");
+        }
 
         return result;
     }
