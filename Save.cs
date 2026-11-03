@@ -139,7 +139,7 @@ class Save
 
         foreach (string file in files)
         {
-            result += "\n" + Path.GetFileNameWithoutExtension(file);
+            result += "\n-|" + Path.GetFileNameWithoutExtension(file);
         }
 
         return result;

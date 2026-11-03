@@ -1,12 +1,10 @@
 ﻿class Program
 {
-    public static Menu OpenedMenu;
-    public static Receipt OpenedReceipt;
     public static bool blockInput;
 
     static void Main(string[] args)
     {
-        HomeMenu();
+        Menu.HomeMenu();
     }
 
     //--------------------------COMMANDS
@@ -29,13 +27,13 @@
         string command = Command.GetCommand(input);
         string[] prms = Command.GetParams(input);
 
-        switch (OpenedMenu)
+        switch (Menu.openedMenu)
         {
-            case Menu.Home:
+            case MenuType.Home:
                 HomeMenuCommands(command, prms);
                 break;
-            case Menu.Edit:
-                EditMenuCommands(command, prms, OpenedReceipt);
+            case MenuType.ReceiptEdit:
+                EditMenuCommands(command, prms, Menu.openedReceipt);
                 break;
         }
     }
@@ -46,28 +44,36 @@
         {
             case Vocabulary.CLOSE:
                 Environment.Exit(0);
-                break;
+                return;
+
             case Vocabulary.CLEAR:
-                HomeMenu();
-                break;
+                Menu.HomeMenu();
+                return;
+
             case Vocabulary.NEW:
                 New(prms);
                 break;
+
             case Vocabulary.DELETE:
                 Del(prms);
                 break;
+
             case Vocabulary.LIST:
                 Lst(prms);
                 break;
+
             case Vocabulary.OPEN:
                 Opn(prms);
                 break;
+
             case Vocabulary.SAVE:
                 Sav(prms);
                 break;
+
             case Vocabulary.LOAD:
                 Lod(prms);
                 break;
+
             default:
                 NewLine("ERROR: no command.");
                 break;
@@ -83,11 +89,11 @@
                 break;
 
             case Vocabulary.CLEAR:
-                EditMenu(receipt);
+                Menu.ReceiptEditMenu(receipt);
                 return;
 
             case Vocabulary.EXIT:
-                HomeMenu();
+                Menu.HomeMenu();
                 return;
 
             case Vocabulary.ADD:
@@ -111,39 +117,7 @@
                 break;
         }
 
-        EditMenu(receipt);
-    }
-
-    //--------------------------MENUS
-
-    static void HomeMenu()
-    {
-        OpenedMenu = Menu.Home;
-
-        NewLine("COMMANDS:", true);
-        NewLine("|" + Vocabulary.NEW + " [type] [name] - Create a new obj of type");
-        NewLine("|" + Vocabulary.OPEN + " [name] - Open a receipt");
-        NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
-
-        Console.WriteLine();
-
-        NewLine("TYPES:");
-        NewLine("|" + Vocabulary.USER + " - User");
-        NewLine("|" + Vocabulary.RECEIPT + " - Receipt");
-
-        Wait4Input();
-    }
-
-    static void EditMenu(Receipt receipt)
-    {
-        OpenedMenu = Menu.Edit;
-        OpenedReceipt = receipt;
-
-        NewLine("EDIT RECEIPT - " + receipt.GetName() + ":", true);
-
-        NewLine(receipt.Show());
-
-        Wait4Input();
+        Menu.ReceiptEditMenu(receipt);
     }
 
     //--------------------------CONSOLE COMMANDS
@@ -152,7 +126,7 @@
     {
         Console.WriteLine("-" + line);
     }
-    static void NewLine(string line, bool clear)
+    public static void NewLine(string line, bool clear)
     {
         Console.Clear();
         Console.WriteLine("Welcome to ReceiptCalculator v2.0 by Gabry151!");
@@ -328,7 +302,7 @@
                     return;
                 }
 
-                EditMenu(receipt);
+                Menu.ReceiptEditMenu(receipt);
 
                 break;
 
@@ -487,11 +461,4 @@
 
         receipt.SetPayer(name);
     }
-}
-
-public enum Menu
-{
-    Home,
-    Edit,
-    User,
 }

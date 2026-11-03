@@ -88,7 +88,7 @@ class ReceiptList : IAddable
         foreach (Receipt receipt in receiptList)
         {
             temp += "\n";
-            temp += "-" + receipt.GetName();
+            temp += "-|" + receipt.GetName();
         }
 
         return temp;

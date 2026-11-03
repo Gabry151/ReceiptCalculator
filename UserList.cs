@@ -98,7 +98,7 @@ class UserList
         foreach (User user in userList)
         {
             temp += "\n";
-            temp += "-" + user.GetName();
+            temp += "-|" + user.GetName();
         }
 
         return temp;
