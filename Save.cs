@@ -36,9 +36,9 @@ class Save
         //return false se il file non esiste
         if (!Path.Exists(filePath)) return false;
 
-        ClearAllData();
-
         Program.blockInput = true;
+        
+        ClearAllData();
 
         using (StreamReader sr = new StreamReader(filePath))
         {
@@ -60,6 +60,7 @@ class Save
     {
         UserList.ClearList();
         ReceiptList.ClearList();
+        Menu.HomeMenu();
     }
 
     public static string GetUserSave()

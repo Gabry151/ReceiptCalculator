@@ -112,11 +112,8 @@ class Receipt
         }
 
         //scrivi chi ha pagato
-        if (GetPayer() != null)
-        {
-            result += " | PAYER: ";
-            result += GetPayer();
-        }
+        result += " | PAYER: ";
+        result += GetPayer();
 
         return result;
     }

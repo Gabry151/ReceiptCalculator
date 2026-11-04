@@ -4,6 +4,8 @@
 
     static void Main(string[] args)
     {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+
         Menu.HomeMenu();
     }
 
@@ -13,7 +15,7 @@
     {
         if (blockInput) return;
 
-        Console.WriteLine("-----");
+        Writer.SeparatorLine(0);
         Console.Write(">");
         string input = Console.ReadLine();
 
@@ -43,7 +45,7 @@
         switch (command)
         {
             case Vocabulary.CLOSE:
-                Environment.Exit(0);
+                Cls();
                 return;
 
             case Vocabulary.CLEAR:
@@ -74,8 +76,12 @@
                 Lod(prms);
                 break;
 
+            case Vocabulary.HELP:
+                Hlp();
+                break;
+
             default:
-                NewLine("ERROR: no command.");
+                Writer.NewLine("ERROR: no command. Type HLP for a list of commands.");
                 break;
         }
     }
@@ -85,7 +91,7 @@
         switch (command)
         {
             case Vocabulary.CLOSE:
-                Environment.Exit(0);
+                Cls();
                 break;
 
             case Vocabulary.CLEAR:
@@ -113,7 +119,7 @@
                 break;
 
             default:
-                NewLine("ERROR: no command.");
+                Writer.NewLine("ERROR: no command. Type HLP in HomeMenu for a list of commands.");
                 break;
         }
 
@@ -122,23 +128,53 @@
 
     //--------------------------CONSOLE COMMANDS
 
-    public static void NewLine(string line)
-    {
-        Console.WriteLine("-" + line);
-    }
-    public static void NewLine(string line, bool clear)
-    {
-        Console.Clear();
-        Console.WriteLine("Welcome to ReceiptCalculator v2.0 by Gabry151!");
-        Console.WriteLine("-----");
-        NewLine(line);
-    }
+    // public static void NewLine(string line)
+    // {
+    //     Console.WriteLine("-" + line);
+    // }
+    // public static void NewLine(string line, bool clear)
+    // {
+    //     Console.Clear();
+
+    //     Console.BackgroundColor = ConsoleColor.DarkGreen;
+    //     Console.ForegroundColor = ConsoleColor.White;
+    //     Console.WriteLine("Welcome to ReceiptCalculator v2.0 by Gabry151!");
+
+    //     Console.ResetColor();
+    //     Console.ForegroundColor = ConsoleColor.DarkGreen;
+
+    //     SeparatorLine(3);
+    //     NewLine(line);
+    // }
+
+    // public static void SeparatorLine(int importance)
+    // {
+    //     string temp = "";
+
+    //     switch (importance)
+    //     {
+    //         case 0:
+    //             temp = "-----";
+    //             break;
+    //         case 1:
+    //             temp = "----------";
+    //             break;
+    //         case 2:
+    //             temp = "_____";
+    //             break;
+    //         case 3:
+    //             temp = "__________";
+    //             break;
+    //     }
+
+    //     Console.WriteLine(temp);
+    // }
 
     static bool CheckParamErrors(string[] prms, int limInf)
     {
         if (prms.Length < limInf)
         {
-            NewLine("ERROR: not enough parameters.");
+            Writer.NewLine("ERROR: not enough parameters.");
             return true;
         }
         return false;
@@ -152,13 +188,19 @@
 
         if (prms.Length > limSup)
         {
-            NewLine("ERROR: too many parameters.");
+            Writer.NewLine("ERROR: too many parameters.");
             return true;
         }
         return false;
     }
 
     //--------------------------------------------------------------------
+
+    static void Cls()
+    {
+        Console.ResetColor();
+        Environment.Exit(0);
+    }
 
     static void New(string[] prms)
     {
@@ -177,11 +219,11 @@
                 {
                     if (temp[i])
                     {
-                        NewLine("User " + names[i] + " successfully created.");
+                        Writer.NewLine("User " + names[i] + " successfully created.");
                     }
                     else
                     {
-                        NewLine("User " + names[i] + " can't be created.");
+                        Writer.NewLine("User " + names[i] + " can't be created.");
                     }
                 }
 
@@ -195,18 +237,18 @@
                 {
                     if (temp[i])
                     {
-                        NewLine("Receipt " + names[i] + " successfully created.");
+                        Writer.NewLine("Receipt " + names[i] + " successfully created.");
                     }
                     else
                     {
-                        NewLine("Receipt " + names[i] + " can't be created.");
+                        Writer.NewLine("Receipt " + names[i] + " can't be created.");
                     }
                 }
 
                 break;
 
             default:
-                NewLine("ERROR: unexisting parameters.");
+                Writer.NewLine("ERROR: unexisting parameters.");
                 break;
         }
 
@@ -215,36 +257,60 @@
 
     static void Del(string[] prms)
     {
-        if (CheckParamErrors(prms, 2, 2)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
+
+        // se DEL ALL cancella tutti i dati
+        if (prms.Length == 1 && prms[0] == Vocabulary.ALL)
+        {
+            Save.ClearAllData();
+            Writer.NewLine("All data successfully removed.");
+            return;
+        }
 
         string name = prms[1];
 
         switch (prms[0])
         {
             case Vocabulary.USER:
+                //se è all
+                if (name == Vocabulary.ALL)
+                {
+                    UserList.ClearList();
+                    Writer.NewLine("All users successfully removed.");
+                    break;
+                }
+            
                 if (UserList.Remove(name))
                 {
-                    NewLine("User " + name + " successfully removed.");
+                    Writer.NewLine("User " + name + " successfully removed.");
                 }
                 else
                 {
-                    NewLine("User " + name + " doesn't exist.");
+                    Writer.NewLine("User " + name + " doesn't exist.");
                 }
                 break;
 
             case Vocabulary.RECEIPT:
+                //se è all
+                if (name == Vocabulary.ALL)
+                {
+                    ReceiptList.ClearList();
+                    Writer.NewLine("All receipts successfully removed.");
+                    break;
+                }
+
                 if (ReceiptList.Remove(name))
                 {
-                    NewLine("Receipt " + name + " successfully removed.");
+                    Writer.NewLine("Receipt " + name + " successfully removed.");
                 }
                 else
                 {
-                    NewLine("Receipt " + name + " doesn't exist.");
+                    Writer.NewLine("Receipt " + name + " doesn't exist.");
                 }
                 break;
 
             default:
-                NewLine("ERROR: unexisting parameters.");
+                Writer.NewLine("ERROR: unexisting parameters.");
                 break;
         }
     }
@@ -256,38 +322,51 @@
         switch (prms[0])
         {
             case Vocabulary.USER:
-                NewLine(UserList.Show());
+                Writer.NewLine(UserList.Show());
                 break;
 
             case Vocabulary.RECEIPT:
-                NewLine(ReceiptList.Show());
+                Writer.NewLine(ReceiptList.Show());
                 break;
             
             case Vocabulary.SAVE:
-                NewLine(Save.GetSaveList());
+                Writer.NewLine(Save.GetSaveList());
                 break;
 
             case Vocabulary.LOAD:
-                NewLine(Save.GetSaveList());
+                Writer.NewLine(Save.GetSaveList());
                 break;
 
             default:
-                NewLine("ERROR: unexisting parameters.");
+                Writer.NewLine("ERROR: unexisting parameters.");
                 break;
         }
     }
 
     static void Opn(string[] prms)
     {
-        if (CheckParamErrors(prms, 2, 2)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
 
-        string name = prms[1];
+        string name;
+        string type;
 
-        switch (prms[0])
+        if (prms.Length == 1)
+        {
+            name = prms[0];
+            type = Vocabulary.RECEIPT;
+        }
+        else
+        {
+            type = prms[0];
+            name = prms[1];
+        }
+
+
+        switch (type)
         {
             case Vocabulary.USER:
 
-                NewLine(UserList.GetUserByName(name).Show());
+                Writer.NewLine(UserList.GetUserByName(name)?.Show());
 
                 break;
 
@@ -298,7 +377,7 @@
                 //check if receipt exist
                 if (receipt == null)
                 {
-                    NewLine("Receipt " + name + " doesn't exist.");
+                    Writer.NewLine("Receipt " + name + " doesn't exist.");
                     return;
                 }
 
@@ -307,7 +386,7 @@
                 break;
 
             default:
-                NewLine("ERROR: unexisting parameters.");
+                Writer.NewLine("ERROR: unexisting parameters.");
                 break;
         }
     }
@@ -320,11 +399,11 @@
 
         if (Save.DoSave(name))
         {
-            NewLine("Saved successfully in <<" + name + ".txt>>!");
+            Writer.NewLine("Saved successfully in <<" + name + ".txt>>!");
         }
         else
         {
-            NewLine("Save error!");
+            Writer.NewLine("Save error!");
         }
     }
 
@@ -336,13 +415,39 @@
 
         if (Save.DoLoad(name))
         {
-            Console.WriteLine("-----");
-            NewLine("<<" + name + ".txt>> loaded successfully!");
+            Writer.SeparatorLine(0);
+            Writer.NewLine("<<" + name + ".txt>> loaded successfully!");
         }
         else
         {
-            NewLine("Load error!");
+            Writer.NewLine("Load error!");
         }
+    }
+
+    static void Hlp()
+    {
+        Writer.NewLine("", false);
+
+        Writer.NewLine("HOME MENU - COMMANDS:");
+        Writer.NewLine("|" + Vocabulary.NEW + " [type] [name] - Create a new obj of type");
+        Writer.NewLine("|" + Vocabulary.DELETE + " [type] [name] - Delete a created obj of type");
+        Writer.NewLine("|" + Vocabulary.OPEN + " [name] - Open a receipt");
+        Writer.NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
+        Writer.NewLine("|" + Vocabulary.SAVE + " [name] - Save all in a file");
+        Writer.NewLine("|" + Vocabulary.LOAD + " [name] - Load a save file");
+        Writer.NewLine("|" + Vocabulary.CLEAR + " - Clear the console outputs");
+        Writer.NewLine("|" + Vocabulary.CLOSE + " - Close the application");
+        Writer.NewLine("|" + Vocabulary.HELP + " - List all commands.");
+
+        Writer.NewLine("", false);
+
+        Writer.NewLine("RECEIPT EDIT MENU - COMMANDS:");
+        Writer.NewLine("|" + Vocabulary.ADD + " [amount] [users] - Add an entry of amount to user");
+        Writer.NewLine("|" + Vocabulary.REMOVE + " [entry] - Remove the entry");
+        Writer.NewLine("|" + Vocabulary.DISCOUNT + " [amount] [entry] - Add a discount to the entry of amount");
+        Writer.NewLine("|" + Vocabulary.PAYER + " [user] - Register the user who payed for the receipt");
+        Writer.NewLine("|" + Vocabulary.EXIT + " - Return to the HomeMenu");
+        Writer.NewLine("|" + Vocabulary.CLOSE + " - Close the application");
     }
 
 

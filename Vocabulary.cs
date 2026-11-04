@@ -9,6 +9,7 @@ public static class Vocabulary
     public const string OPEN = "OPN";
     public const string SAVE = "SAV";
     public const string LOAD = "LOD";
+    public const string HELP = "HLP";
 
     //TYPE
     public const string USER = "USR";

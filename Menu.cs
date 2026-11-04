@@ -9,21 +9,21 @@ class Menu
 {
     public static MenuType openedMenu;
     public static Receipt openedReceipt;
+    
 
     public static void HomeMenu()
     {
         openedMenu = MenuType.Home;
 
-        Program.NewLine("COMMANDS:", true);
-        Program.NewLine("|" + Vocabulary.NEW + " [type] [name] - Create a new obj of type");
-        Program.NewLine("|" + Vocabulary.OPEN + " [name] - Open a receipt");
-        Program.NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
+        Writer.FirstLine("HOME MENU");
 
-        Console.WriteLine();
+        Writer.SeparatorLine(1);
 
-        Program.NewLine("TYPES:");
-        Program.NewLine("|" + Vocabulary.USER + " - User");
-        Program.NewLine("|" + Vocabulary.RECEIPT + " - Receipt");
+        Writer.NewLine("", false);
+
+        Writer.NewLine("TYPES:");
+        Writer.NewLine("|" + Vocabulary.USER + " - User");
+        Writer.NewLine("|" + Vocabulary.RECEIPT + " - Receipt");
 
         Program.Wait4Input();
     }
@@ -33,9 +33,11 @@ class Menu
         openedMenu = MenuType.ReceiptEdit;
         openedReceipt = receipt;
 
-        Program.NewLine("EDIT RECEIPT - " + receipt.GetName() + ":", true);
+        Writer.FirstLine("EDIT RECEIPT MENU - " + receipt.GetName() + ":");
 
-        Program.NewLine(receipt.Show());
+        Writer.SeparatorLine(1);
+
+        Writer.NewLine(receipt.Show());
 
         Program.Wait4Input();
     }
