@@ -37,7 +37,7 @@ class Menu
 
         Writer.SeparatorLine(1);
 
-        Writer.NewLine(receipt.Show());
+        Writer.NewLine(receipt.Show(), false);
 
         Program.Wait4Input();
     }
