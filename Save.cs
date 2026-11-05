@@ -4,6 +4,8 @@ class Save
     {
         string docPath = Path.Combine(Directory.GetCurrentDirectory(), "save");
 
+        if (!Path.Exists(docPath)) Directory.CreateDirectory(docPath);
+
         if (!Vocabulary.IsGood(fileName)) return false;
 
         using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, fileName + ".txt")))
