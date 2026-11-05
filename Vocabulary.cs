@@ -26,6 +26,11 @@ public static class Vocabulary
     //KEYWORDS
     public const string ALL = "ALL";
 
+    //DIRECTORIES
+    public const string SAVEDIR = "saves";
+    public const string USERDIR = "saves/users";
+    public const string RECEIPTDIR = "saves/receipts";
+
     //LISTS
     public static readonly char[] charBlackList =
     {

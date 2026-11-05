@@ -4,6 +4,7 @@ class Receipt
     private List<Entry> entries = new();
     private float totalDiscount = 0f;
     private string payer;
+    private List<string> settledUsers = new();
 
 
     public Receipt(string name)
@@ -22,6 +23,27 @@ class Receipt
 
     public string GetPayer() { return payer; }
     public void SetPayer(string name) { payer = name; }
+
+    public List<string> GetSettledUsers() { return settledUsers; }
+    public void AddSettledUser(string name)
+    {
+        if (!UserList.Contain(name)) return;
+        if (HasSettled(name)) return;
+
+        settledUsers.Add(name);
+    }
+    public void RemoveSettledUser(string name)
+    {
+        if (!UserList.Contain(name)) return;
+        if (!HasSettled(name)) return;
+
+        settledUsers.Remove(name);
+    }
+    public bool HasSettled(string name)
+    {
+        if (!UserList.Contain(name)) return false;
+        return settledUsers.Contains(name);
+    }
 
     public void Add(Entry entry)
     {
@@ -72,6 +94,22 @@ class Receipt
         return result;
     }
 
+    public List<string> GetAllUsers()
+    {
+        List<string> result = new();
+        
+        foreach (Entry entry in entries)
+        {
+            foreach (string name in entry.GetUsers())
+            {
+                if (result.Contains(name)) continue;
+                result.Add(name);
+            }
+        }
+
+        return result;
+    }
+
     public string Show()
     {
         string result = "";
@@ -114,6 +152,13 @@ class Receipt
         //scrivi chi ha pagato
         result += " | PAYER: ";
         result += GetPayer();
+
+        //scrivi quelli che hanno già sistemato il pagamento
+        result += " | SETTLED:";
+        foreach (string user in GetSettledUsers())
+        {
+            result += " " + user;
+        }
 
         return result;
     }

@@ -118,6 +118,10 @@
                 Pyr(receipt, prms);
                 break;
 
+            case Vocabulary.SETTLED:
+                Stl(receipt, prms);
+                break;
+
             default:
                 Writer.NewLine("ERROR: no command. Type HLP in HomeMenu for a list of commands.");
                 break;
@@ -218,10 +222,18 @@
         if (CheckParamErrors(prms, 1, 2)) return;
 
         // se DEL ALL cancella tutti i dati
-        if (prms.Length == 1 && prms[0] == Vocabulary.ALL)
+        if (prms.Length == 1)
         {
-            Save.ClearAllData();
-            Writer.NewLine("All data successfully removed.");
+            if (prms[0] == Vocabulary.ALL)
+            {
+                Save.ClearAllData();
+                Writer.NewLine("All data successfully removed.");
+            }
+            else
+            {
+                Writer.NewLine("ERROR: unexisting parameters.");
+            }
+
             return;
         }
 
@@ -275,9 +287,17 @@
 
     static void Lst(string[] prms)
     {
-        if (CheckParamErrors(prms, 1, 1)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
 
-        switch (prms[0])
+        string type = prms[0];
+        string type2 = Vocabulary.ALL;
+
+        if (prms.Length == 2)
+        {
+            type2 = prms[1];
+        }
+
+        switch (type)
         {
             case Vocabulary.USER:
                 Writer.NewLine(UserList.Show());
@@ -288,11 +308,11 @@
                 break;
             
             case Vocabulary.SAVE:
-                Writer.NewLine(Save.GetSaveList());
+                Writer.NewLine(Save.GetSaveList(type2));
                 break;
 
             case Vocabulary.LOAD:
-                Writer.NewLine(Save.GetSaveList());
+                Writer.NewLine(Save.GetSaveList(type2));
                 break;
 
             default:
@@ -351,27 +371,82 @@
 
     static void Sav(string[] prms)
     {
-        if (CheckParamErrors(prms, 1, 1)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
 
-        string name = prms[0];
+        string type;
+        string name;
 
-        if (Save.DoSave(name))
+        if (prms.Length == 1)
         {
-            Writer.NewLine("Saved successfully in <<" + name + ".txt>>!");
+            type = Vocabulary.ALL;
+            name = prms[0];
         }
         else
         {
-            Writer.NewLine("Save error!");
+            type = prms[0];
+            name = prms[1];
+        }
+
+        switch (type)
+        {
+            case Vocabulary.USER:
+                break;
+
+            case Vocabulary.RECEIPT:
+                Receipt receipt = ReceiptList.GetReceiptByName(name);
+                if (receipt != null)
+                {
+                    if (Save.SaveReceipt(receipt))
+                    {
+                        Writer.NewLine("Saved successfully in <<" + name + ".txt>>!");
+                    }
+                    else
+                    {
+                        Writer.NewLine("Save error!");
+                    }
+                }
+                else
+                {
+                    Writer.NewLine("ERROR: this receipt doesn't exist!");
+                }
+                break;
+            
+            case Vocabulary.ALL:
+                if (Save.SaveAll(name))
+                {
+                    Writer.NewLine("Saved successfully in <<" + name + ".txt>>!");
+                }
+                else
+                {
+                    Writer.NewLine("Save error!");
+                }
+                break;
+
+            default:
+                Writer.NewLine("ERROR: unexisting parameters.");
+                break;
         }
     }
 
     static void Lod(string[] prms)
     {
-        if (CheckParamErrors(prms, 1, 1)) return;
+        if (CheckParamErrors(prms, 1, 2)) return;
 
-        string name = prms[0];
+        string type;
+        string name;
 
-        if (Save.DoLoad(name))
+        if (prms.Length == 1)
+        {
+            type = Vocabulary.ALL;
+            name = prms[0];
+        }
+        else
+        {
+            type = prms[0];
+            name = prms[1];
+        }
+
+        if (Save.DoLoad(type, name))
         {
             Writer.SeparatorLine(0);
             Writer.NewLine("<<" + name + ".txt>> loaded successfully!");
@@ -523,5 +598,35 @@
         if (!UserList.Contain(name)) return;
 
         receipt.SetPayer(name);
+    }
+
+    static void Stl(Receipt receipt, string[] prms)
+    {
+        if (CheckParamErrors(prms, 1)) return;
+
+        string[] names = prms;
+
+        foreach (string name in names)
+        {
+            if (name == Vocabulary.ALL)
+            {
+                foreach (string user in receipt.GetAllUsers())
+                {
+                    receipt.AddSettledUser(user);
+                }
+                return;
+            }
+
+            if (!UserList.Contain(name)) continue;
+
+            if (receipt.HasSettled(name))
+            {
+                receipt.RemoveSettledUser(name);
+            }
+            else
+            {
+                receipt.AddSettledUser(name);
+            }
+        }
     }
 }

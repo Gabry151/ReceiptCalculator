@@ -18,6 +18,7 @@ class User
         foreach (Receipt receipt in ReceiptList.Get())
         {
             if (receipt.GetPayer() != name) continue;
+            if (receipt.HasSettled(GetName())) continue;
             result += receipt.GetTotalOf(GetName());
         }
 
