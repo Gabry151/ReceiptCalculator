@@ -464,7 +464,7 @@
         Writer.NewLine("HOME MENU - COMMANDS:");
         Writer.NewLine("|" + Vocabulary.NEW + " [type] [name] - Create a new obj of type");
         Writer.NewLine("|" + Vocabulary.DELETE + " [type] [name] - Delete a created obj of type");
-        Writer.NewLine("|" + Vocabulary.OPEN + " [name] - Open a receipt");
+        Writer.NewLine("|" + Vocabulary.OPEN + " [type] [name] - Open the type by name");
         Writer.NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
         Writer.NewLine("|" + Vocabulary.SAVE + " [name] - Save all in a file");
         Writer.NewLine("|" + Vocabulary.LOAD + " [name] - Load a save file");
@@ -479,6 +479,7 @@
         Writer.NewLine("|" + Vocabulary.REMOVE + " [entry] - Remove the entry");
         Writer.NewLine("|" + Vocabulary.DISCOUNT + " [amount] [entry] - Add a discount to the entry of amount");
         Writer.NewLine("|" + Vocabulary.PAYER + " [user] - Register the user who payed for the receipt");
+        Writer.NewLine("|" + Vocabulary.SETTLED + " [user] - Register who settled the payment");
         Writer.NewLine("|" + Vocabulary.EXIT + " - Return to the HomeMenu");
         Writer.NewLine("|" + Vocabulary.CLOSE + " - Close the application");
     }
