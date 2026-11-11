@@ -1,1 +1,1 @@
-RECEIPT CALCULATOR è un programma che permette di dividere gli scontrini.
+RECEIPT CALCULATOR is useful for splitting up receipts.
