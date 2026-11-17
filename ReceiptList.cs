@@ -1,17 +1,32 @@
-class ReceiptList : IAddable
+class ReceiptList : ITypeList<Receipt>
 {
     private static List<Receipt> receiptList = new();
 
 
     public static List<Receipt> Get() { return receiptList; }
 
+    public static Receipt GetElement(string name)
+    {
+        foreach (Receipt receipt in receiptList)
+        {
+            if (receipt.GetName() == name)
+            {
+                return receipt;
+            }
+        }
+
+        return null;
+    }
+
+    public static bool Contain(string name)
+    {
+        return GetElement(name) != null;
+    }
+
     public static bool Add(string name)
     {
         //se già esiste annulla
-        if (GetReceiptByName(name) != null)
-        {
-            return false;
-        }
+        if (Contain(name)) return false;
 
         //se è nella blacklist annulla
         if (!Vocabulary.IsGood(name))
@@ -37,7 +52,7 @@ class ReceiptList : IAddable
 
     public static bool Remove(string name)
     {
-        Receipt receipt = GetReceiptByName(name);
+        Receipt receipt = GetElement(name);
         if (receipt == null) return false;
 
         receiptList.Remove(receipt);
@@ -54,19 +69,6 @@ class ReceiptList : IAddable
         }
 
         return results;
-    }
-
-    public static Receipt GetReceiptByName(string name)
-    {
-        foreach (Receipt receipt in receiptList)
-        {
-            if (receipt.GetName() == name)
-            {
-                return receipt;
-            }
-        }
-
-        return null;
     }
 
     public static List<string> GetAllNames()

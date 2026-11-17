@@ -122,6 +122,10 @@
                 Stl(receipt, prms);
                 break;
 
+            case Vocabulary.EDIT:
+                Edt(receipt, prms);
+                break;
+
             default:
                 Writer.NewLine("ERROR: no command. Type HLP in HomeMenu for a list of commands.");
                 break;
@@ -344,13 +348,12 @@
         {
             case Vocabulary.USER:
 
-                Writer.NewLine(UserList.GetUserByName(name)?.Show());
-
+                Writer.NewLine(UserList.GetElement(name)?.Show());
                 break;
 
             case Vocabulary.RECEIPT:
 
-                Receipt receipt = ReceiptList.GetReceiptByName(name);
+                Receipt receipt = ReceiptList.GetElement(name);
 
                 //check if receipt exist
                 if (receipt == null)
@@ -360,7 +363,6 @@
                 }
 
                 Menu.ReceiptEditMenu(receipt);
-
                 break;
 
             default:
@@ -393,7 +395,7 @@
                 break;
 
             case Vocabulary.RECEIPT:
-                Receipt receipt = ReceiptList.GetReceiptByName(name);
+                Receipt receipt = ReceiptList.GetElement(name);
                 if (receipt != null)
                 {
                     if (Save.SaveReceipt(receipt))
@@ -478,6 +480,7 @@
         Writer.NewLine("|" + Vocabulary.ADD + " [amount] [users] - Add an entry of amount to user");
         Writer.NewLine("|" + Vocabulary.REMOVE + " [entry] - Remove the entry");
         Writer.NewLine("|" + Vocabulary.DISCOUNT + " [amount] [entry] - Add a discount to the entry of amount");
+        Writer.NewLine("|" + Vocabulary.EDIT + " [entry] [amount] [users] - Add a discount to the entry of amount");
         Writer.NewLine("|" + Vocabulary.PAYER + " [user] - Register the user who payed for the receipt");
         Writer.NewLine("|" + Vocabulary.SETTLED + " [user] - Register who settled the payment");
         Writer.NewLine("|" + Vocabulary.EXIT + " - Return to the HomeMenu");
@@ -629,5 +632,32 @@
                 receipt.AddSettledUser(name);
             }
         }
+    }
+
+    static void Edt(Receipt receipt, string[] prms)
+    {
+        if (CheckParamErrors(prms, 2)) return;
+
+        //se non ci sono righe, ritorna
+        if (receipt.GetEntries().Count <= 0) return;
+
+        //definisci l'entry
+        if (!int.TryParse(prms[0], out int entryNum)) return;
+
+        Entry entry = receipt.GetEntry(entryNum);
+
+        prms[1] = prms[1].Replace('.', ',');
+
+        int prmsToSkip = 1;
+
+        //definisci il valore se lo è
+        if (float.TryParse(prms[1], out float value))
+        {
+            entry.SetAmount(value);
+            prmsToSkip = 2;
+        }
+
+        //salta il primo parametro che è il valore
+        entry.ChangeUsers(prms.Skip(prmsToSkip).ToList());
     }
 }

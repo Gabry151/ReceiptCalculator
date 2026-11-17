@@ -14,6 +14,7 @@ public static class Vocabulary
     //TYPE
     public const string USER = "USR";
     public const string RECEIPT = "RCT";
+    public const string KEY = "KEY";
 
     //EDIT COMMANDS
     public const string EXIT = "EXT";
@@ -22,6 +23,7 @@ public static class Vocabulary
     public const string DISCOUNT = "DSC";
     public const string PAYER = "PYR";
     public const string SETTLED = "STL";
+    public const string EDIT = "EDT";
 
     //KEYWORDS
     public const string ALL = "ALL";

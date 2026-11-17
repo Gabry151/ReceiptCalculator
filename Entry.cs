@@ -49,6 +49,19 @@ class Entry
         return users.Count;
     }
 
+    public void ChangeUsers(List<string> names)
+    {
+        List<string> result = new();
+
+        foreach (string name in names)
+        {
+            if (!UserList.Contain(name)) continue;
+            result.Add(name);
+        }
+        
+        users = result;
+    }
+
     public float GetFinalAmount(float totalDiscount)
     {
         float result = GetAmount();

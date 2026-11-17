@@ -1,4 +1,4 @@
-class UserList
+class UserList : ITypeList<User>
 {
     private static List<User> userList = new();
 
@@ -8,7 +8,7 @@ class UserList
     public static bool Add(string name)
     {
         //se il nome già esiste annulla
-        if (GetUserByName(name) != null)
+        if (GetElement(name) != null)
         {
             return false;
         }
@@ -37,7 +37,7 @@ class UserList
 
     public static bool Remove(string name)
     {
-        User user = GetUserByName(name);
+        User user = GetElement(name);
         if (user == null) return false;
         
         userList.Remove(user);
@@ -57,7 +57,7 @@ class UserList
     }
 
 
-    public static User GetUserByName(string name)
+    public static User GetElement(string name)
     {
         foreach (User user in userList)
         {
