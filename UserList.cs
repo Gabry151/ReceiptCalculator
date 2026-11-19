@@ -14,7 +14,7 @@ class UserList : ITypeList<User>
         }
 
         //se il nome è nella blacklist annulla
-        if (!Vocabulary.IsGood(name))
+        if (!Vocabulary.IsAllowed(name))
         {
             return false;
         }

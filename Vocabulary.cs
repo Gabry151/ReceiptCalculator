@@ -45,7 +45,7 @@ public static class Vocabulary
         ALL,
     };
 
-    public static bool IsGood(string name)
+    public static bool IsAllowed(string name)
     {
         foreach (string word in wordBlackList)
         {

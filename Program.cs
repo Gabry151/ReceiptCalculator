@@ -35,7 +35,10 @@
                 HomeMenuCommands(command, prms);
                 break;
             case MenuType.ReceiptEdit:
-                EditMenuCommands(command, prms, Menu.openedReceipt);
+                EditRctMenuCommands(command, prms, Menu.openedReceipt);
+                break;
+            case MenuType.KeyEdit:
+                EditKeyMenuCommands(command, prms, Menu.openedKey);
                 break;
         }
     }
@@ -76,6 +79,10 @@
                 Lod(prms);
                 break;
 
+            case Vocabulary.KEY:
+                KeyPerform(prms);
+                break;
+
             case Vocabulary.HELP:
                 Hlp();
                 break;
@@ -86,7 +93,7 @@
         }
     }
 
-    static void EditMenuCommands(string command, string[] prms, Receipt receipt)
+    static void EditRctMenuCommands(string command, string[] prms, Receipt receipt)
     {
         switch (command)
         {
@@ -126,12 +133,48 @@
                 Edt(receipt, prms);
                 break;
 
+            case Vocabulary.KEY:
+                KeyPerform(prms);
+                break;
+
             default:
                 Writer.NewLine("ERROR: no command. Type HLP in HomeMenu for a list of commands.");
                 break;
         }
 
         Menu.ReceiptEditMenu(receipt);
+    }
+
+    static void EditKeyMenuCommands(string command, string[] prms, Key key)
+    {
+        switch (command)
+        {
+            case Vocabulary.CLOSE:
+                Cls();
+                break;
+
+            case Vocabulary.CLEAR:
+                Menu.KeyEditMenu(key);
+                return;
+
+            case Vocabulary.EXIT:
+                Menu.HomeMenu();
+                return;
+
+            case Vocabulary.ADD:
+                Key_ADD(key, prms);
+                break;
+
+            case Vocabulary.REMOVE:
+                Key_RMV(key, prms);
+                break;
+
+            default:
+                Writer.NewLine("ERROR: no command. Type HLP in HomeMenu for a list of commands.");
+                break;
+        }
+
+        Menu.KeyEditMenu(key);
     }
 
     //--------------------------CONSOLE COMMANDS
@@ -181,43 +224,36 @@
 
                 temp = UserList.Add(names);
 
-                for (int i = 0; i < temp.Length; i++)
-                {
-                    if (temp[i])
-                    {
-                        Writer.NewLine("User " + names[i] + " successfully created.");
-                    }
-                    else
-                    {
-                        Writer.NewLine("User " + names[i] + " can't be created.");
-                    }
-                }
-
                 break;
 
             case Vocabulary.RECEIPT:
 
                 temp = ReceiptList.Add(names);
 
-                for (int i = 0; i < temp.Length; i++)
-                {
-                    if (temp[i])
-                    {
-                        Writer.NewLine("Receipt " + names[i] + " successfully created.");
-                    }
-                    else
-                    {
-                        Writer.NewLine("Receipt " + names[i] + " can't be created.");
-                    }
-                }
+                break;
+
+            case Vocabulary.KEY:
+
+                temp = KeyList.Add(names);
 
                 break;
 
             default:
                 Writer.NewLine("ERROR: unexisting parameters.");
-                break;
+                return;
         }
 
+        for (int i = 0; i < temp.Length; i++)
+        {
+            if (temp[i])
+            {
+                Writer.NewLine(prms[0] + " " + names[i] + " successfully created.");
+            }
+            else
+            {
+                Writer.NewLine(prms[0] + " " + names[i] + " can't be created.");
+            }
+        }
 
     }
 
@@ -283,6 +319,25 @@
                 }
                 break;
 
+            case Vocabulary.KEY:
+                //se è all
+                if (name == Vocabulary.ALL)
+                {
+                    KeyList.ClearList();
+                    Writer.NewLine("All keys successfully removed.");
+                    break;
+                }
+
+                if (KeyList.Remove(name))
+                {
+                    Writer.NewLine("Key " + name + " successfully removed.");
+                }
+                else
+                {
+                    Writer.NewLine("Key " + name + " doesn't exist.");
+                }
+                break;
+
             default:
                 Writer.NewLine("ERROR: unexisting parameters.");
                 break;
@@ -309,6 +364,10 @@
 
             case Vocabulary.RECEIPT:
                 Writer.NewLine(ReceiptList.Show());
+                break;
+
+            case Vocabulary.KEY:
+                Writer.NewLine(KeyList.Show());
                 break;
             
             case Vocabulary.SAVE:
@@ -348,7 +407,16 @@
         {
             case Vocabulary.USER:
 
-                Writer.NewLine(UserList.GetElement(name)?.Show());
+                User user = UserList.GetElement(name);
+
+                //check if user exist
+                if (user == null)
+                {
+                    Writer.NewLine("User " + name + " doesn't exist.");
+                    return;
+                }
+
+                Writer.NewLine(user.Show());
                 break;
 
             case Vocabulary.RECEIPT:
@@ -363,6 +431,20 @@
                 }
 
                 Menu.ReceiptEditMenu(receipt);
+                break;
+
+            case Vocabulary.KEY:
+
+                Key key = KeyList.GetElement(name);
+
+                //check if key exist
+                if (key == null)
+                {
+                    Writer.NewLine("Key " + name + " doesn't exist.");
+                    return;
+                }
+
+                Menu.KeyEditMenu(key);
                 break;
 
             default:
@@ -459,6 +541,22 @@
         }
     }
 
+    static void KeyPerform(string[] prms)
+    {
+        if (CheckParamErrors(prms, 1, 1)) return;
+
+        string name = prms[0];
+
+        blockInput = true;
+
+        foreach (string line in KeyList.GetElement(name).GetCommands())
+        {
+            PerformInput(line);
+        }
+
+        blockInput = false;
+    }
+
     static void Hlp()
     {
         Writer.NewLine("", false);
@@ -470,6 +568,7 @@
         Writer.NewLine("|" + Vocabulary.LIST + " [type] - Show a list of all created obj of type");
         Writer.NewLine("|" + Vocabulary.SAVE + " [name] - Save all in a file");
         Writer.NewLine("|" + Vocabulary.LOAD + " [name] - Load a save file");
+        Writer.NewLine("|" + Vocabulary.KEY + " [name] - Perform a key macro");
         Writer.NewLine("|" + Vocabulary.CLEAR + " - Clear the console outputs");
         Writer.NewLine("|" + Vocabulary.CLOSE + " - Close the application");
         Writer.NewLine("|" + Vocabulary.HELP + " - List all commands.");
@@ -485,6 +584,12 @@
         Writer.NewLine("|" + Vocabulary.SETTLED + " [user] - Register who settled the payment");
         Writer.NewLine("|" + Vocabulary.EXIT + " - Return to the HomeMenu");
         Writer.NewLine("|" + Vocabulary.CLOSE + " - Close the application");
+
+        Writer.NewLine("", false);
+
+        Writer.NewLine("KEY EDIT MENU - COMMANDS:");
+        Writer.NewLine("|" + Vocabulary.ADD + " [amount] [users] - Add a line to the key macro");
+        Writer.NewLine("|" + Vocabulary.REMOVE + " [entry] - Remove the line");
     }
 
 
@@ -659,5 +764,21 @@
 
         //salta il primo parametro che è il valore
         entry.ChangeUsers(prms.Skip(prmsToSkip).ToList());
+    }
+
+
+    static void Key_ADD(Key key, string[] prms)
+    {
+        string line = String.Join(' ', prms);
+        key.AddCommand(line);
+    }
+
+    static void Key_RMV(Key key, string[] prms)
+    {
+        if (CheckParamErrors(prms, 1, 1)) return;
+
+        if (!int.TryParse(prms[0], out int index)) return;
+
+        key.RemoveCommand(index);
     }
 }

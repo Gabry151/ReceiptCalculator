@@ -29,10 +29,7 @@ class ReceiptList : ITypeList<Receipt>
         if (Contain(name)) return false;
 
         //se è nella blacklist annulla
-        if (!Vocabulary.IsGood(name))
-        {
-            return false;
-        }
+        if (!Vocabulary.IsAllowed(name)) return false;
 
         receiptList.Add(new Receipt(name));
         return true;

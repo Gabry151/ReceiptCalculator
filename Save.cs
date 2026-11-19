@@ -6,7 +6,7 @@ class Save
 
         if (!Path.Exists(docPath)) Directory.CreateDirectory(docPath);
 
-        if (!Vocabulary.IsGood(fileName)) return false;
+        if (!Vocabulary.IsAllowed(fileName)) return false;
 
         //check if not contain any invalid characters
         foreach (char c in fileName)
@@ -67,7 +67,7 @@ class Save
         string docPath = Path.Combine(Directory.GetCurrentDirectory(), directory);
 
         //check if in blacklist
-        if (!Vocabulary.IsGood(fileName)) return false;
+        if (!Vocabulary.IsAllowed(fileName)) return false;
 
         //check if not contain any invalid characters
         foreach (char c in fileName)

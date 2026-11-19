@@ -1,54 +1,99 @@
-class KeyList : ITypeList<string>
+class KeyList : ITypeList<Key>
 {
-    public static Dictionary<string, float> keyList = new();
+    public static List<Key> keyList = new();
 
     public static bool Add(string name)
     {
-        throw new NotImplementedException();
+        if (Contain(name)) return false;
+        if (!Vocabulary.IsAllowed(name)) return false;
+
+        keyList.Add(new Key(name));
+        return true;
     }
 
-    public static bool[] Add(string[] name)
+    public static bool[] Add(string[] names)
     {
-        throw new NotImplementedException();
+        bool[] results = new bool[names.Length];
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            results[i] = Add(names[i]);
+        }
+
+        return results;
     }
 
     public static void ClearList()
     {
-        throw new NotImplementedException();
+        keyList.Clear();
     }
 
     public static bool Contain(string name)
     {
-        throw new NotImplementedException();
+        return GetElement(name) != null;
     }
 
-    public static List<string> Get()
+    public static List<Key> Get()
     {
-        throw new NotImplementedException();
+        return keyList;
     }
 
     public static List<string> GetAllNames()
     {
-        throw new NotImplementedException();
+        List<string> temp = new();
+
+        foreach (Key key in keyList)
+        {
+            temp.Add(key.GetName());
+        }
+
+        return temp;
     }
 
-    public static string GetElement(string name)
+    public static Key GetElement(string name)
     {
-        throw new NotImplementedException();
+        foreach (Key key in keyList)
+        {
+            if (key.GetName() == name)
+            {
+                return key;
+            }
+        }
+
+        return null;
     }
 
     public static bool Remove(string name)
     {
-        throw new NotImplementedException();
+        Key key = GetElement(name);
+        if (key == null) return false;
+
+        keyList.Remove(key);
+        return true;
     }
 
-    public static bool[] Remove(string[] name)
+    public static bool[] Remove(string[] names)
     {
-        throw new NotImplementedException();
+        bool[] results = new bool[names.Length];
+
+        for (int i = 0; i < names.Length; i++)
+        {
+            results[i] = Remove(names[i]);
+        }
+
+        return results;
     }
 
     public static string Show()
     {
-        throw new NotImplementedException();
+        string temp = "List of all receipts:";
+
+        foreach (Key key in keyList)
+        {
+            temp += "\n";
+            temp += "-|" + key.GetName();
+        }
+
+        return temp;
     }
 }
