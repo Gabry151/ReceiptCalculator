@@ -1,0 +1,15 @@
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\bin\Debug\net10.0\ReceiptCalculator.exe
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\bin\Debug\net10.0\ReceiptCalculator.deps.json
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\bin\Debug\net10.0\ReceiptCalculator.runtimeconfig.json
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\bin\Debug\net10.0\ReceiptCalculator.dll
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\bin\Debug\net10.0\ReceiptCalculator.pdb
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.AssemblyInfoInputs.cache
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.AssemblyInfo.cs
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.csproj.CoreCompileInputs.cache
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.sourcelink.json
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.dll
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\refint\ReceiptCalculator.dll
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.pdb
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ReceiptCalculator.genruntimeconfig.cache
+C:\Users\gabri\Documents\Progetti\ReceiptCalculator\obj\Debug\net10.0\ref\ReceiptCalculator.dll

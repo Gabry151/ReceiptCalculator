@@ -13,9 +13,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\gabri\\Documents\\Progetti\\ReceiptCalculator\\ReceiptCalculator v2.csproj",
-      "projectName": "ReceiptCalculator v2",
-      "projectPath": "C:\\Users\\gabri\\Documents\\Progetti\\ReceiptCalculator\\ReceiptCalculator v2.csproj",
+      "projectUniqueName": "C:\\Users\\gabri\\Documents\\Progetti\\ReceiptCalculator\\ReceiptCalculator.csproj",
+      "projectName": "ReceiptCalculator",
+      "projectPath": "C:\\Users\\gabri\\Documents\\Progetti\\ReceiptCalculator\\ReceiptCalculator.csproj",
       "packagesPath": "C:\\Users\\gabri\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\gabri\\Documents\\Progetti\\ReceiptCalculator\\obj\\",
       "projectStyle": "PackageReference",
