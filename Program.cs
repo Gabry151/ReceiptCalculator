@@ -222,19 +222,40 @@
         {
             case Vocabulary.USER:
 
-                temp = UserList.Add(names);
+                List<User> users = new();
+
+                foreach (string name in names)
+                {
+                    users.Add(new User(name));
+                }
+
+                temp = UserList.Add(users.ToArray());
 
                 break;
 
             case Vocabulary.RECEIPT:
 
-                temp = ReceiptList.Add(names);
+                List<Receipt> rcts = new();
+
+                foreach (string name in names)
+                {
+                    rcts.Add(new Receipt(name));
+                }
+
+                temp = ReceiptList.Add(rcts.ToArray());
 
                 break;
 
             case Vocabulary.KEY:
 
-                temp = KeyList.Add(names);
+                List<Key> keys = new();
+
+                foreach (string name in names)
+                {
+                    keys.Add(new Key(name));
+                }
+
+                temp = KeyList.Add(keys.ToArray());
 
                 break;
 

@@ -1,15 +1,9 @@
-class User
+class User : ElementType
 {
-    private string name;
-
-
     public User(string name)
     {
-        this.name = name;
+        SetName(name);
     }
-
-    public string GetName() { return name; }
-    public void SetName(string name) { this.name = name; }
 
     public float GetTotalOwnTo(string name)
     {
@@ -25,9 +19,8 @@ class User
         return result;
     }
 
-    public string Show()
+    public override string Show()
     {
-
         string result = GetName() + ":";
 
         foreach (string user in UserList.GetAllNames())

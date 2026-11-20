@@ -1,6 +1,5 @@
-class Receipt
+class Receipt : ElementType
 {
-    private string name;
     private List<Entry> entries = new();
     private float totalDiscount = 0f;
     private string payer;
@@ -9,11 +8,8 @@ class Receipt
 
     public Receipt(string name)
     {
-        this.name = name;
+        SetName(name);
     }
-
-    public string GetName() { return name; }
-    public void SetName(string name) { this.name = name; }
 
     public float GetTotalDiscount() { return totalDiscount; }
     public void SetTotalDiscount(float amount) { totalDiscount = amount; }
@@ -110,7 +106,7 @@ class Receipt
         return result;
     }
 
-    public string Show()
+    public override string Show()
     {
         string result = "";
 

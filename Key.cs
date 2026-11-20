@@ -1,19 +1,9 @@
-class Key
+class Key : ElementType
 {
-    private string name;
     private List<string> commands = new();
 
 
-    public Key(string name) { this.name = name; }
-
-    public string GetName() { return name; }
-    public bool SetName(string name)
-    {
-        if (!Vocabulary.IsAllowed(name)) return false;
-
-        this.name = name;
-        return true;
-    }
+    public Key(string name) { SetName(name); }
 
     public List<string> GetCommands() { return commands; }
     public bool AddCommand(string line)
@@ -30,7 +20,7 @@ class Key
         return true;
     }
 
-    public string Show()
+    public override string Show()
     {
         string result = "EXECUTE THIS:";
 

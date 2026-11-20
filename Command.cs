@@ -43,4 +43,19 @@ class Command
 
         return prms;
     }
+
+    public static Type? GetType(string s)
+    {
+        switch (s)
+        {
+            case Vocabulary.USER:
+                return typeof(User);
+            case Vocabulary.RECEIPT:
+                return typeof(Receipt);
+            case Vocabulary.KEY:
+                return typeof(Key);
+            default:
+                return null;
+        }
+    }
 }
